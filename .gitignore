@@ -1,0 +1,18 @@
+# Ignore environment-specific files
+env/
+inventory-management/.env  
+
+
+# Ignore SQLite database file
+*.sqlite3
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+
+# Ignore static and media files
+staticfiles/
+media/
