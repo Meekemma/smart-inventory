@@ -1,19 +1,17 @@
-
-
 services:
   backend:
     container_name: inventory_system
     build:
-      context: ./inventory-management  # Points to Django project folder
+      context: .  # ✅ Fix: This should be the current directory
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8001:8000"
     volumes:
-      - ./inventory-management:/usr/src/app
+      - .:/usr/src/app
     depends_on:
       - redis
     env_file:
-      - ./inventory-management/.env  # Correct path to .env file
+      - .env  # ✅ Ensure .env is in the root folder
     restart: always
 
   redis:
@@ -24,18 +22,18 @@ services:
       - "6379:6379"
 
   celery:
-    build: ./inventory-management  # Uses the same build as backend
+    build: .  # ✅ Uses the same build as backend
     container_name: celery_worker
     command: celery -A inventory worker --loglevel=info
     depends_on:
       - backend
       - redis
     env_file:
-      - ./inventory-management/.env  # Correct path to .env file
+      - .env
     restart: always
 
   celery-beat:
-    build: ./inventory-management  # Uses the same build as backend
+    build: .  # ✅ Fix: Use the same build context
     container_name: celery_beat
     command: celery -A inventory beat --loglevel=info
     depends_on:
@@ -43,5 +41,5 @@ services:
       - redis
       - celery
     env_file:
-      - ./inventory-management/.env  # Correct path to .env file
+      - .env
     restart: always
